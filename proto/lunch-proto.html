@@ -403,7 +403,7 @@ h2.q em{color:var(--accent)}
 </div>
 
 <script>
-const DATA_URL='data.4527d34103.json';
+const DATA_URL='data.ba2888dafe.json';
 (async function(){let DATA;
 try{DATA=await fetch(DATA_URL).then(r=>{if(!r.ok)throw new Error(r.status);return r.json();});}
 catch(e){const w=document.getElementById('spWait');if(w)w.textContent='데이터를 불러오지 못했어요. 네트워크를 확인하고 다시 열어주세요.';const sp=document.getElementById('splash');if(sp)sp.classList.add('slow');return;}
@@ -813,7 +813,7 @@ function showNotice(n){$('#nTitle').innerHTML=(n.level==='warn'?'⚠ ':'')+n.tit
   $('#nLater').onclick=()=>{$('#noticePop').classList.remove('open');};}
 function refreshDot(){$('#helpBtn').classList.toggle('dot',unseenNotices().length>0);}
 function applyRemoteConfig(){const c=NOTICES.config||{};const C=DATA.config||(DATA.config={});if(c.feedbackEmail!=null)C.feedbackEmail=c.feedbackEmail;const b=$('#banner');if(c.banner){b.textContent=c.banner;b.hidden=false;}else b.hidden=true;}
-(async function(){if(!/^https?:/.test(location.protocol))return;try{const r=await fetch('notices.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();NOTICES.list=j.notices||[];NOTICES.config=j.config||{};applyRemoteConfig();refreshDot();
+(async function(){const base=/^https?:/.test(location.protocol)?'':((DATA.config||{}).appUrl||'')+'proto/';if(!base&&!/^https?:/.test(location.protocol))return;try{const r=await fetch(base+'notices.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();NOTICES.list=j.notices||[];NOTICES.config=j.config||{};applyRemoteConfig();refreshDot();
   const first=unseenNotices()[0];if(first){const sp=$('#splash');const wait=sp?2200:300;setTimeout(()=>showNotice(first),wait);}}catch{}})();
 if(window.__spReady)window.__spReady();
 render();
