@@ -265,6 +265,7 @@ html,body{font-size:14.5px;letter-spacing:-.005em}
 .vdate{font-size:10px;color:var(--ink3);white-space:nowrap}
 .sharebox{display:flex;gap:14px;align-items:center}.sharebox img{width:112px;height:112px;border-radius:10px;background:#fff;padding:6px;flex-shrink:0}.sharebox p{margin:0 0 8px;font-size:13.5px;color:var(--ink2)}.sharebox .primary{padding:10px;font-size:14px}
 .notes{display:flex;flex-direction:column;gap:14px;max-height:60dvh;overflow-y:auto}
+.notes details.note{padding:0}.notes details.note>summary{list-style:none;cursor:pointer;padding:12px 14px;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:space-between;-webkit-tap-highlight-color:transparent}.notes details.note>summary::-webkit-details-marker{display:none}.notes details.note>summary::after{content:"";width:8px;height:8px;border-right:1.5px solid var(--ink3);border-bottom:1.5px solid var(--ink3);transform:rotate(45deg);transition:transform .2s;margin-right:4px}.notes details.note[open]>summary::after{transform:rotate(-135deg)}.notes details.note>summary small{font-weight:400;color:var(--ink3);margin-left:6px}.notes details.note .nb{padding:0 14px 12px}.notes .sub{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}.notes .sub h6{margin:0 0 4px;font-size:13px;font-weight:700;color:var(--ink2)}
 .note h5{margin:0 0 4px;font-size:14px;font-weight:700}
 .note h5 small{font-weight:400;color:var(--ink3);margin-left:6px}
 .note ul{margin:0;padding-left:18px;color:var(--ink2);font-size:13.5px;line-height:1.6}
@@ -402,7 +403,7 @@ h2.q em{color:var(--accent)}
 </div>
 
 <script>
-const DATA_URL='data.dd82c52ad7.json';
+const DATA_URL='data.4c0a816602.json';
 (async function(){let DATA;
 try{DATA=await fetch(DATA_URL).then(r=>{if(!r.ok)throw new Error(r.status);return r.json();});}
 catch(e){const w=document.getElementById('spWait');if(w)w.textContent='데이터를 불러오지 못했어요. 네트워크를 확인하고 다시 열어주세요.';const sp=document.getElementById('splash');if(sp)sp.classList.add('slow');return;}
@@ -779,18 +780,23 @@ document.addEventListener('click',e=>{const fb=e.target.closest('[data-feedback]
   const ua=navigator.userAgent;const standalone=window.navigator.standalone||matchMedia('(display-mode: standalone)').matches;
   const isIOS=/iPhone|iPad|iPod/.test(ua),isKakao=/KAKAOTALK/i.test(ua),isSamsung=/SamsungBrowser/.test(ua),isAndroid=/Android/.test(ua);
   const guide=[];
-  const C=DATA.config||{};guide.push(`<div class="note share"><h5>동료에게 추천하기</h5><div class="sharebox">${C.qrDataUri?`<img src="${C.qrDataUri}" alt="앱 QR">`:''}<div><p>QR을 보여주거나 링크를 보내세요.</p><button class="primary" id="shareBtn">링크 공유하기</button><div class="hint" id="shareHint"></div></div></div></div>`);
-  if(standalone)guide.push('<div class="note"><h5>홈 화면 앱으로 실행 중</h5><ul><li>설치 완료. 즐겨찾기가 이 앱 안에 보관됩니다.</li></ul></div>');
+  const C=DATA.config||{};
+  // 도움말은 대항목 접기/펼치기. 기본은 "홈 화면에 추가"만 펼침 (2026-08-27)
+  const sec=(title,inner,open)=>`<details class="note"${open?' open':''}><summary>${title}</summary><div class="nb">${inner}</div></details>`;
+  const sub=(title,items)=>`<div class="sub"><h6>${title}</h6><ul>${items.map(i=>'<li>'+i+'</li>').join('')}</ul></div>`;
+  if(standalone)guide.push(sec('홈 화면 앱으로 실행 중','<ul><li>설치 완료. 즐겨찾기가 이 앱 안에 보관됩니다.</li><li>새 버전이 나오면 아래에 「새로고침」 띠가 뜹니다.</li></ul>',true));
   else{
-    guide.push('<div class="note"><h5>홈 화면에 추가해서 쓰세요</h5><ul><li>앱처럼 바로 열리고, 즐겨찾기가 안전하게 유지됩니다.</li><li>주소창 없이 전체 화면으로 보입니다.</li></ul></div>');
-    if(isKakao)guide.push('<div class="note"><h5>카카오톡에서 열었다면</h5><ul><li>오른쪽 아래 <b>⋯</b> → <b>다른 브라우저로 열기</b>(iPhone은 <b>Safari로 열기</b>)</li><li>그 다음 아래 안내대로 추가</li></ul></div>');
-    guide.push('<div class="note"><h5>iPhone · Safari</h5><ul><li>아래 가운데 <b>공유</b> 버튼(네모에 화살표)</li><li><b>홈 화면에 추가</b> → 이름 <b>AIBK한끼</b> 확인 → 추가</li></ul></div>');
-    guide.push('<div class="note"><h5>Android · Chrome</h5><ul><li>오른쪽 위 <b>⋮</b> → <b>홈 화면에 추가</b>(또는 <b>앱 설치</b>)</li></ul></div>');
-    guide.push('<div class="note"><h5>Android · 삼성 인터넷</h5><ul><li>아래 <b>≡</b> → <b>현재 페이지 추가</b> → <b>홈 화면</b></li></ul></div>');
+    let inner='<ul><li>앱처럼 바로 열리고, 즐겨찾기가 안전하게 유지됩니다.</li><li>주소창 없이 전체 화면으로 보입니다.</li></ul>';
+    if(isKakao)inner+=sub('카카오톡에서 열었다면',['오른쪽 아래 <b>⋯</b> → <b>다른 브라우저로 열기</b>(iPhone은 <b>Safari로 열기</b>)','그 다음 아래 안내대로 추가']);
+    inner+=sub('iPhone · Safari',['아래 가운데 <b>공유</b> 버튼(네모에 화살표)','<b>홈 화면에 추가</b> → 이름 <b>AIBK한끼</b> 확인 → 추가']);
+    inner+=sub('Android · Chrome',['오른쪽 위 <b>⋮</b> → <b>홈 화면에 추가</b>(또는 <b>앱 설치</b>)']);
+    inner+=sub('Android · 삼성 인터넷',['아래 <b>≡</b> → <b>현재 페이지 추가</b> → <b>홈 화면</b>']);
+    guide.push(sec('홈 화면에 추가해서 쓰세요',inner,true));
   }
-  const act=activeNotices();if(act.length)guide.push(`<div class="note"><h5>공지</h5><div class="nlist">${act.map(n=>`<div class="n"><div class="t">${n.title}</div><div class="m">${n.date||''}</div><div class="b">${n.body||''}</div></div>`).join('')}</div></div>`);
-  guide.push(`<div class="note"><h5>만든 사람 · 알려드립니다</h5><ul><li>이 앱은 IBK기업은행의 <b>공식 서비스가 아닙니다.</b> ${C.authorNote||''}${C.author?` (${C.author})`:''}</li><li>데이터는 공공 인허가·포털 자료를 자동 수집한 것이라 <b>정확성을 보장하지 않습니다.</b> 메뉴·가격·영업 여부는 방문 전 가게에 확인해 주세요.</li><li>서버는 회사 시스템이 아닌 개인 계정(깃허브)에서 운영됩니다. 개인정보를 수집하지 않습니다.</li></ul></div>`);
-  guide.push('<div class="note"><h5>이 앱은</h5><ul><li>IBK 본점·파이낸스타워에서 걸어서 갈 수 있는 종각·종로·을지로·명동 가게를 보여줍니다.</li><li>점심·회식·카페 목적을 고르고, 카테고리→메뉴→가게 순으로 둘러보거나, 맨 위 <b>「오늘 뭐 먹지?」</b> 카드에서 아무거나 뽑고 사다리를 타세요.</li><li>★ 인기 별점은 최근 1년 블로그 언급을 같은 분류끼리 비교한 사내 임시 지표입니다.</li><li>정보가 틀리거나 빠졌으면 알려주세요 — 직원 제보 기능을 준비 중입니다.</li></ul></div>');
+  guide.push(sec('동료에게 추천하기',`<div class="sharebox">${C.qrDataUri?`<img src="${C.qrDataUri}" alt="앱 QR">`:''}<div><p>QR을 보여주거나 링크를 보내세요.</p><button class="primary" id="shareBtn">링크 공유하기</button><div class="hint" id="shareHint"></div></div></div>`,false));
+  guide.push(sec('이 앱은','<ul><li>IBK 본점·파이낸스타워에서 걸어서 갈 수 있는 종각·종로·을지로·명동 가게를 보여줍니다.</li><li>점심·회식·카페 목적을 고르고, 카테고리→메뉴→가게 순으로 둘러보거나, 맨 위 <b>「오늘 뭐 먹지?」</b> 카드에서 아무거나 뽑고 사다리를 타세요.</li><li>★ 인기 별점은 최근 1년 블로그 언급을 같은 분류끼리 비교한 사내 임시 지표입니다.</li><li>정보가 틀리거나 빠졌으면 알려주세요 — 직원 제보 기능을 준비 중입니다.</li></ul>',false));
+  const act=activeNotices();if(act.length)guide.push(sec(`공지 <small>${act.length}건</small>`,`<div class="nlist">${act.map(n=>`<div class="n"><div class="t">${n.title}</div><div class="m">${n.date||''}</div><div class="b">${n.body||''}</div></div>`).join('')}</div>`,false));
+  guide.push(sec('만든 사람 · 알려드립니다',`<ul><li>이 앱은 IBK기업은행의 <b>공식 서비스가 아닙니다.</b> ${C.authorNote||''}${C.author?` (${C.author})`:''}</li><li>데이터는 공공 인허가·포털 자료를 자동 수집한 것이라 <b>정확성을 보장하지 않습니다.</b> 메뉴·가격·영업 여부는 방문 전 가게에 확인해 주세요.</li><li>서버는 회사 시스템이 아닌 개인 계정(깃허브)에서 운영됩니다. 개인정보를 수집하지 않습니다.</li></ul>`,false));
   $('#helpBtn').onclick=()=>{activeNotices().forEach(n=>markSeen(n.id));refreshDot();$('#helpBody').innerHTML=guide.join('');$('#helpPop').classList.add('open');
     const sb=$('#shareBtn');if(sb)sb.onclick=async()=>{const url=C.appUrl||location.href;const text='AIBK 한끼 — 을지로·종각·명동 점심·카페·회식, 걸어서 가는 한끼';try{if(navigator.share){await navigator.share({title:'AIBK 한끼',text,url});}else{await navigator.clipboard.writeText(url);$('#shareHint').textContent='링크를 복사했어요. 메신저에 붙여넣으세요.';}}catch(e){try{await navigator.clipboard.writeText(url);$('#shareHint').textContent='링크를 복사했어요.';}catch{ $('#shareHint').textContent=url; }}};};
   const R=DATA.release||{};$('#verV').textContent=R.version||'0';$('#verD').textContent=(R.updated||'').replace('T',' ').slice(0,16);
