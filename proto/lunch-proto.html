@@ -363,7 +363,7 @@ function render(){
 <path d="M50 4v30h30v22h30v20" stroke="currentColor" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>
 <circle cx="50" cy="4" r="3" fill="currentColor" opacity=".85"/><circle cx="110" cy="76" r="3.5" fill="currentColor"/></svg></button>`;
     html+=`<h2 class="q display">${PN[S.purpose]}, ${S.loc.name}에서 걸어서 <em>${S.walkMax}분</em> 안 ${ps.length}곳</h2>`;
-    html+='<div class="grid">'+DATA.tree.map(l1=>{const n=ps.filter(p=>(p.l1||[]).includes(l1.code)).length;const inL1=ps.filter(p=>(p.l1||[]).includes(l1.code));const tm=topMenus(inL1,null,5);return `<button class="cat" data-l1="${l1.code}" ${n?'':'disabled'}><span class="n display">${l1.name}</span><span class="c"><b class="num">${n}</b>곳</span><span class="m">${tm.length?tm.map((x,i)=>i===0?`<b>${x}</b>`:x).join(' · '):'<i>메뉴 정보 없음</i>'}</span></button>`;}).join('')+'</div>';
+    html+='<div class="grid">'+DATA.tree.map(l1=>{const n=ps.filter(p=>(p.l1||[]).includes(l1.code)).length;if(!n)return '';const inL1=ps.filter(p=>(p.l1||[]).includes(l1.code));const tm=topMenus(inL1,null,5);return `<button class="cat" data-l1="${l1.code}"><span class="n display">${l1.name}</span><span class="c"><b class="num">${n}</b>곳</span><span class="m">${tm.length?tm.map((x,i)=>i===0?`<b>${x}</b>`:x).join(' · '):'<i>메뉴 정보 없음</i>'}</span></button>`;}).join('')+'</div>';
     if(!ps.length)html+=`<div class="empty">이 거리 안에는 아직 없어요.<br><button data-walk="15">도보 15분으로 넓히기</button></div>`;
   } else if(!S.l2){
     const l1=DATA.tree.find(x=>x.code===S.l1);
