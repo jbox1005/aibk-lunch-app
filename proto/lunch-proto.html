@@ -41,7 +41,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 /* 스플래시 */
 .splash{position:fixed;inset:0;z-index:100;background:#0A3F7E;display:flex;align-items:center;justify-content:center;color:#fff;transition:opacity .6s ease,visibility .6s}
 .sp-wait{position:absolute;bottom:calc(env(safe-area-inset-bottom) + 72px);left:0;right:0;text-align:center;font-size:13px;color:rgba(255,255,255,.55);opacity:0;transition:opacity .5s}.splash.slow .sp-wait{opacity:1}
-.swbar{position:fixed;left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:90;background:#0A3F7E;color:#fff;border-radius:12px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13.5px;box-shadow:0 6px 20px rgba(0,0,0,.25)}.swbar button{font:inherit;background:#fff;color:#0A3F7E;border:0;border-radius:8px;padding:6px 12px;font-weight:700}
+.swbar{position:fixed;left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:90;background:#0A3F7E;color:#fff;border-radius:12px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13.5px;box-shadow:0 6px 20px rgba(0,0,0,.25)}.swbar[hidden]{display:none}.swbar button{font:inherit;background:#fff;color:#0A3F7E;border:0;border-radius:8px;padding:6px 12px;font-weight:700}
 .splash.hide{opacity:0;visibility:hidden;pointer-events:none}
 .sp-in{display:flex;flex-direction:column;align-items:center;gap:14px;animation:spIn .9s ease both}
 .sp-in img{width:96px;height:96px;border-radius:22px;box-shadow:0 12px 36px rgba(0,0,0,.35)}
@@ -402,7 +402,7 @@ h2.q em{color:var(--accent)}
 </div>
 
 <script>
-const DATA_URL='data.99d229ab1e.json';
+const DATA_URL='data.dd82c52ad7.json';
 (async function(){let DATA;
 try{DATA=await fetch(DATA_URL).then(r=>{if(!r.ok)throw new Error(r.status);return r.json();});}
 catch(e){const w=document.getElementById('spWait');if(w)w.textContent='데이터를 불러오지 못했어요. 네트워크를 확인하고 다시 열어주세요.';const sp=document.getElementById('splash');if(sp)sp.classList.add('slow');return;}
