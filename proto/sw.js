@@ -1,8 +1,9 @@
-/* AIBK 한끼 서비스 워커 — build-proto.js 가 e6f0e7b884/data.ba2888dafe.json 을 채워 sw.js 로 낸다.
+/* AIBK 한끼 서비스 워커 — build-proto.js 가 96f1c1c1eb/data.3b9d70b1a5.json 을 채워 sw.js 로 낸다.
  * 껍데기(HTML·manifest·아이콘)는 버전별 캐시, 데이터(data.<해시>.json)는 해시로 캐시.
  * HTML 은 네트워크 우선(4초) → 캐시. 데이터는 캐시 우선. notices.json 등 나머지는 손대지 않는다. */
 const VER = '__VER__';
 const DATA_URL = '__DATA_URL__';
+const BUILD = '3b9d70b1a5';
 const SHELL = 'aibk-shell-' + VER;
 const DATAC = 'aibk-data';
 const PRECACHE = ['lunch-proto.html', 'manifest.json', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png'];
@@ -19,7 +20,7 @@ self.addEventListener('activate', (e) => {
   e.waitUntil((async () => {
     for (const k of await caches.keys()) if (k.startsWith('aibk-shell-') && k !== SHELL) await caches.delete(k);
     const d = await caches.open(DATAC);
-    for (const req of await d.keys()) if (!req.url.endsWith('/' + DATA_URL)) await d.delete(req);
+    for (const req of await d.keys()) if (!req.url.includes('.' + BUILD + '.json')) await d.delete(req);
     await self.clients.claim();
   })());
 });
@@ -30,7 +31,7 @@ self.addEventListener('fetch', (e) => {
   const req = e.request; if (req.method !== 'GET') return;
   const url = new URL(req.url); if (url.origin !== location.origin) return;
   const file = url.pathname.split('/').pop();
-  if (/^data\.[0-9a-f]+\.json$/.test(file)) {
+  if (/\.[0-9a-f]{10}\.json$/.test(decodeURIComponent(file))) {
     e.respondWith((async () => { const d = await caches.open(DATAC); const hit = await d.match(req); if (hit) return hit; const r = await fetch(req); if (r.ok) d.put(req, r.clone()); return r; })());
     return;
   }

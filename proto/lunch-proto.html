@@ -41,7 +41,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 /* 스플래시 */
 .splash{position:fixed;inset:0;z-index:100;background:#0A3F7E;display:flex;align-items:center;justify-content:center;color:#fff;transition:opacity .6s ease,visibility .6s}
 .sp-wait{position:absolute;bottom:calc(env(safe-area-inset-bottom) + 72px);left:0;right:0;text-align:center;font-size:13px;color:rgba(255,255,255,.55);opacity:0;transition:opacity .5s}.splash.slow .sp-wait{opacity:1}
-.swbar{position:fixed;left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:90;background:#0A3F7E;color:#fff;border-radius:12px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13.5px;box-shadow:0 6px 20px rgba(0,0,0,.25)}.swbar[hidden]{display:none}.swbar button{font:inherit;background:#fff;color:#0A3F7E;border:0;border-radius:8px;padding:6px 12px;font-weight:700}
+.swbar{position:fixed;left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:90;background:#0A3F7E;color:#fff;border-radius:12px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13.5px;box-shadow:0 6px 20px rgba(0,0,0,.25)}.swbar[hidden]{display:none}.myadd{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}.myadd .hint{font-size:12.5px;color:var(--ink3);margin-bottom:8px}.myadd .row{display:flex;gap:6px;flex-wrap:wrap}.opt .k.del{margin-left:auto;color:var(--ink3);padding:0 4px}.swbar button{font:inherit;background:#fff;color:#0A3F7E;border:0;border-radius:8px;padding:6px 12px;font-weight:700}
 .splash.hide{opacity:0;visibility:hidden;pointer-events:none}
 .sp-in{display:flex;flex-direction:column;align-items:center;gap:14px;animation:spIn .9s ease both}
 .sp-in img{width:96px;height:96px;border-radius:22px;box-shadow:0 12px 36px rgba(0,0,0,.35)}
@@ -270,7 +270,7 @@ html,body{font-size:14.5px;letter-spacing:-.005em}
 .note h5 small{font-weight:400;color:var(--ink3);margin-left:6px}
 .note ul{margin:0;padding-left:18px;color:var(--ink2);font-size:13.5px;line-height:1.6}
 .brand .wm .city{color:var(--ink)}
-.brand .wm{font-family:"Noto Sans KR",sans-serif;font-weight:700;font-size:17px;letter-spacing:.1em;color:var(--accent);line-height:1}
+.brand .wm{white-space:nowrap;font-family:"Noto Sans KR",sans-serif;font-weight:700;font-size:17px;letter-spacing:.1em;color:var(--accent);line-height:1}
 .brand .bar{width:1px;height:26px;background:var(--line);margin:0 2px}
 .brand .ttl{display:flex;flex-direction:column;gap:2px}
 .brand .ttl .nm{font-size:17px}
@@ -354,7 +354,7 @@ h2.q em{color:var(--accent)}
 <script>
 /* 스플래시는 데이터(파일 끝)보다 먼저 도착하므로 여기서 바로 처리한다 — 느린 회선에서 멈춤 방지 */
 (function(){var sp=document.getElementById("splash");var today=new Date().toISOString().slice(0,10);var seen=null;try{seen=localStorage.getItem("aibk_splash");}catch(e){}
-  var author="25237";document.getElementById("spCredit").textContent=author?"A PERSONAL PROJECT BY "+author.toUpperCase():"A PERSONAL PROJECT";
+  var author="";document.getElementById("spCredit").textContent=author?"A PERSONAL PROJECT BY "+author.toUpperCase():"A PERSONAL PROJECT";
   var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;var standalone=window.navigator.standalone||matchMedia("(display-mode: standalone)").matches;
   var wait=seen===today?0:(reduce?300:(standalone?1400:1800));if(seen!==today){try{localStorage.setItem("aibk_splash",today);}catch(e){}}
   window.__spHide=function(){if(!sp||sp.__gone)return;sp.__gone=true;if(wait===0){sp.remove();return;}sp.classList.add("hide");setTimeout(function(){sp.remove();},700);};
@@ -365,10 +365,12 @@ h2.q em{color:var(--accent)}
 <div class="phone" id="app">
   <div class="top">
     <div class="banner" id="banner" hidden></div>
+    <div class="banner" id="shardLoad" hidden>주변 가게를 불러오는 중…</div>
+    <div class="banner" id="gpsBar" hidden>지금은 <b>서울시청</b> 기준입니다. 위치를 허용하면 내 주변 동네로 바뀝니다. <button type="button" class="flink" style="margin-left:6px">위치 허용</button></div>
     <div class="brandrow"><button class="brand" id="brandBtn" title="처음으로"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMTIgMjA5LjE5MSI+PHBhdGggZmlsbD0iI0ZGRkZGRiIgZD0iTTUyLjU0MiwyLjYwNmMtNS44MzIsMi45MTItMTAuMTc3LDcuOTIyLTEyLjIzMSwxNC4xMDhMMS4yNjUsMTM0LjA2NgoJYy0yLjA2OSw2LjE2Ny0xLjU4NywxMi44MDIsMS4zNTEsMTguNjU5YzIuOTE2LDUuNzkzLDcuOTMyLDEwLjE0OCwxNC4wOTYsMTIuMjA5bDEyOC4wNTIsNDIuOTkzCgljNi4yMDksMi4wNiwxMi44MzcsMS41OTEsMTguNjYxLTEuMzMzYzUuODMyLTIuOTQ1LDEwLjE4Ni03LjkzLDEyLjIxNC0xNC4xMzJsMzkuMDYzLTExNy4zMTgKCWM0LjI3OC0xMi43NzktMi42NzgtMjYuNjQ1LTE1LjQ1Ni0zMC45MDJMNzEuMjA2LDEuMjYzQzY0Ljk4NS0wLjc4OCw1OC40LTAuMzQxLDUyLjU0MiwyLjYwNiIvPjxwYXRoIGZpbGw9IiMwMDk5REEiIGQ9Ik0xMTUuMTM1LDExNS4zMTFjLTYuOTU1LDcuNzU5LTE1LjYyNywxNC4wMjEtMjUuNjgsMTcuOTA0bC01Ljc3OCwyLjIzOFY4MS4wODFsNS43MDgsMi4yMTMKCWMxMC4wNjcsMy44NDMsMTguNzYxLDEwLjEwNSwyNS43NSwxNy44M2M0Ljk3NS04LjAwNyw4LjA2Ni0xNy4yOTUsOC42OTgtMjcuMzk4YzEuNTgyLTI2LjA2Ny0xNC43NDMtNDkuOTg1LTM3LjE2OS01OC4zMQoJTDY4LjE2Niw5LjI2MWMtOC4zNDktMi43ODItMTcuMjM1LDEuODI0LTE5Ljk5LDEwLjE0OEw5LjAxNywxMzYuODI3Yy0yLjc4LDguMzU4LDEuOTAzLDE3LjQyNiwxMC4yNjIsMjAuMTczbDg4Ljg2NywyOS42NzEKCWM5LjA2LTkuNjMzLDE0LjkzOC0yMi4zOTksMTUuNzk1LTM2LjYzN0MxMjQuNzI3LDEzNy4zMjgsMTIxLjQxNSwxMjUuMzQ4LDExNS4xMzUsMTE1LjMxMSBNNjMuNzY4LDEzOC44MDJoLTguODIzVjc3Ljg0MWg4LjgyMwoJVjEzOC44MDJ6Ii8+PHBhdGggZmlsbD0iI0YxNUMyMSIgZD0iTTExMC4wMDksMTA4LjIxOGMtNC45NjItNS44MTctMTAuOTYtMTAuNzA1LTE3Ljg4NS0xNC4yODR2MjguNjU0CglDOTkuMDQ5LDExOSwxMDUuMDgsMTE0LjA1NCwxMTAuMDA5LDEwOC4yMTgiLz48cGF0aCBmaWxsPSIjMDA1NUEyIiBkPSJNMTk2LjQwNiw1Mi4wNzdsLTgxLjU1NC0yNy4yNTZjMTAuOTU0LDExLjk5MiwxNy42NTYsMjcuOTIzLDE3LjY4OCw0NS4zNwoJYzAuMDE3LDEzLjc5My00LjI4MywyNi45ODUtMTEuNzY2LDM4LjAyN2M3LjUxMSwxMS4wMDksMTEuODM2LDI0LjE5MiwxMS44NzQsMzcuOTgzYzAuMDA1LDE2LjQ3NS01LjkxNSwzMS42NTMtMTUuNzcyLDQzLjQwNAoJbDMwLjYyNiwxMC4yMjJjOC4zNzYsMi43ODUsMTcuMjE4LTEuODIsMjAuMDAzLTEwLjE2OWwzOS4xNzktMTE3LjQwN0MyMDkuNDU3LDYzLjkwNywyMDQuNzY5LDU0Ljg0OSwxOTYuNDA2LDUyLjA3NyBNMTc0LjgsMTM4LjYwNwoJbC0xMS4wMTcsMC4wM2wtMjIuNjYzLTMwLjQ4NWwyMy4wMi0zMC40NzdsMTEuMTEyLTAuMDQ0bC0yMy4wNzMsMzAuNTY1TDE3NC44LDEzOC42MDd6Ii8+PC9zdmc+" alt="IBK"><span class="wm">AIBK <span class="city">한끼</span></span><span class="bar"></span><span class="ttl"><span class="nm">점심과 저녁</span><span class="sub">종각 · 종로 · 을지로 · 명동</span></span></button>
     <div class="ver"><span class="verrow"><button id="helpBtn" class="vbtn help" title="도움말">?</button><button id="verBtn" class="vbtn">v<span id="verV"></span></button></span><span id="verD" class="vdate"></span></div></div>
     <div class="row">
-      <button class="loc" id="locBtn"><span class="pin"></span><b id="locName">IBK 본점</b><small>내 위치</small></button>
+      <button class="loc" id="locBtn"><span class="pin"></span><b id="locName">IBK기업은행 본점</b><small>내 위치</small></button>
       <button class="walk" id="walkBtn">도보 <span class="v num" id="walkV">10</span>분</button>
     </div>
     <div class="seg" id="purpose">
@@ -403,7 +405,7 @@ h2.q em{color:var(--accent)}
 </div>
 
 <script>
-const DATA_URL='data.ba2888dafe.json';
+const DATA_URL='data.3b9d70b1a5.json';
 (async function(){let DATA;
 try{DATA=await fetch(DATA_URL).then(r=>{if(!r.ok)throw new Error(r.status);return r.json();});}
 catch(e){const w=document.getElementById('spWait');if(w)w.textContent='데이터를 불러오지 못했어요. 네트워크를 확인하고 다시 열어주세요.';const sp=document.getElementById('splash');if(sp)sp.classList.add('slow');return;}
@@ -433,6 +435,13 @@ const L2NAME={};DATA.tree.forEach(l1=>l1.children.forEach(c=>L2NAME[c.code]=c.na
 const L1NAME={};DATA.tree.forEach(l1=>L1NAME[l1.code]=l1.name);
 const $=s=>document.querySelector(s);
 
+// 서울 전체는 자치구 조각으로 나눠 필요한 구만 받는다 (위치·도보 범위 기준). 받은 조각은 DATA.places 에 합친다.
+const SH={loaded:new Set(),pending:new Set()};
+function kmBetween(a,b){const R=6371,r=x=>x*Math.PI/180,dLat=r(b.lat-a.lat),dLng=r(b.lng-a.lng),h=Math.sin(dLat/2)**2+Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(dLng/2)**2;return 2*R*Math.asin(Math.sqrt(h));}
+function ensureShards(){if(!DATA.shards||!S.loc||!S.loc.coord)return false;const reach=(S.walkMax*67*1.35)/1000+0.5;
+  const need=DATA.shards.index.filter(sh=>kmBetween(S.loc.coord,sh.center)<=reach+sh.radiusKm&&!SH.loaded.has(sh.gu)&&!SH.pending.has(sh.gu));
+  for(const sh of need){SH.pending.add(sh.gu);fetch(DATA.shards.base+sh.file).then(r=>{if(!r.ok)throw 0;return r.json();}).then(arr=>{DATA.places.push(...arr);SH.loaded.add(sh.gu);}).catch(()=>{}).finally(()=>{SH.pending.delete(sh.gu);render();});}
+  return need.length>0||SH.pending.size>0;}
 function inRangeNoCat(){return DATA.places.filter(p=>!p.hidden||S.adv.showHidden).map(p=>({...p,w:walk(S.loc.coord,p.coord)})).filter(p=>p.w.min<=S.walkMax).filter(p=>(p.badges||[]).includes(S.purpose))
   .filter(p=>!S.onlyFav||FAV.has(p.id)).filter(passAdv);}
 function inRange(){return inRangeNoCat().filter(p=>{if(!S.cats)return true;const l1s=p.l1||[];const sub=S.cats2||new Set();return [...S.cats].some(L=>{const has2=[...sub].some(x=>x.startsWith(L+'_'));return has2?(p.cats||[]).some(c=>sub.has(c)):l1s.includes(L);});});}
@@ -445,7 +454,12 @@ function topMenus(ps,l2,n){const mc=new Map();ps.forEach(p=>(p.menus||[]).forEac
 const STARS=n=>'★'.repeat(n)+'<span class="dim">'+'★'.repeat(5-n)+'</span>';
 function tags(p){const t=[];if(p.hidden)t.push('<span class="tag bad">미확인</span>');if(p.stars)t.push(`<span class="tag star">${STARS(p.stars)}</span>`);if(p.recent!=null)t.push(`<span class="tag">최근 1년 ${p.recent}건</span>`);if(p.price?.level){t.push(`<span class="tag" title="점심 1인 가격대">₩ ${PLV[p.price.level]||p.price.level}</span>`);}if(WL[p.waiting?.level])t.push(`<span class="tag ${WL[p.waiting.level][1]}">${WL[p.waiting.level][0]}</span>`);if(p.fac?.private_room==='YES')t.push(`<span class="tag acc">룸 ${p.fac.room_capacity_max?p.fac.room_capacity_max+'인':''}</span>`);if(p.fac?.reservation==='YES')t.push('<span class="tag">예약</span>');if(p.fac?.group_capacity_max)t.push(`<span class="tag">${p.fac.group_capacity_max}명까지</span>`);return t.join('');}
 
-function render(){
+// 일반용: 부제에 내 위치에서 걸어서 60분 안의 동네(자치구)만 보여준다
+function renderZones(){if(!DATA.shards)return;const el=document.querySelector('.brandrow .sub');if(!el||!S.loc||!S.loc.coord)return;const reach=(60*67*1.35)/1000;
+  const near=DATA.shards.index.map(sh=>({gu:sh.gu,d:kmBetween(S.loc.coord,sh.center)-sh.radiusKm})).filter(x=>x.d<=reach).sort((a,b)=>a.d-b.d).map(x=>x.gu);
+  el.textContent=near.length?(near.slice(0,4).join(' · ')+(near.length>4?' 외 '+(near.length-4)+'곳':'')):'서울 전체';
+  const sp=document.querySelector('.sp-s');if(sp&&near.length)sp.textContent=(DATA.config.title||'')+' · '+near.slice(0,3).join(' · ');}
+function render(){const ld=$('#shardLoad');if(ld)ld.hidden=!ensureShards();renderZones();
   const ps=inRange();const m=$('#main');
   const crumb=[];
   crumb.push(S.l1?`<button data-go="root">카테고리</button>`:`<span class="cur">카테고리</span>`);
@@ -478,7 +492,7 @@ function render(){
     const hit=ps.filter(p=>(p.menus||[]).some(mm=>mm.name===S.menu)).sort((a,b)=>a.w.min-b.w.min);
     html+=`<h2 class="q display"><em>${S.menu}</em> 파는 곳 ${hit.length}</h2>`+shopList(hit,S.menu);
   }
-  const AC=DATA.config||{};html+=`<div class="foot"><button class="flink" data-feedback>오류 신고 · 개선 건의</button><span class="dot">·</span>4101곳 · 실데이터 2026-08-27<br><span class="credit">직원이 개인적으로 만든 비공식 앱${AC.author?` · Made by ${AC.author}`:''}</span></div>`;
+  const AC=DATA.config||{};html+=`<div class="foot"><button class="flink" data-feedback>오류 신고 · 개선 건의</button>${AC.credit?'<br><span class="credit">'+AC.credit+'</span>':''}</div>`;
   m.innerHTML=html;
   $('#locName').textContent=S.loc.name;$('#walkV').textContent=S.walkMax;
   document.querySelectorAll('#purpose button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.p===S.purpose));
@@ -562,7 +576,7 @@ function detail(id){
       ${mm?row('수동 수집',(mm.filled_at||'')+(mm.batch_id?' · '+mm.batch_id:'')+(mm.human_verified?' · 현장 확인':'')):''}
       ${mm&&mm.next_review?row('재확인 예정',mm.next_review):''}
       ${mm&&(mm.sources||[]).length?row('근거',mm.sources.map(x=>`<a href="${x.url}" target="_blank" rel="noopener" style="color:var(--accent)">${x.title||x.url}</a>${x.as_of?' ('+x.as_of+')':''}`).join('<br>')):''}
-      ${row('인기 별점',p.stars?STARS(p.stars)+' <span class="na">(사내 임시 지표)</span>':'<span class="na">측정 보류</span>')}${row('블로그 언급',p.recent!=null?'최근 1년 '+p.recent+'건 · 누적 '+(p.reviews||0).toLocaleString()+'건':null)}${row('네이버 분류',p.naverCat)}
+      ${row('인기 별점',p.stars?STARS(p.stars)+' <span class="na">('+((DATA.config||{}).starsNote||'임시 지표')+')</span>':'<span class="na">측정 보류</span>')}${row('블로그 언급',p.recent!=null?'최근 1년 '+p.recent+'건 · 누적 '+(p.reviews||0).toLocaleString()+'건':null)}${row('네이버 분류',p.naverCat)}
     </dl></div>
     <div class="foot"><button class="flink" data-feedback data-shop="${p.name}">이 가게 정보가 틀렸어요</button><span class="dot">·</span>${p.id}</div>
   </div>`;
@@ -610,11 +624,20 @@ $('#main').addEventListener('click',e=>{
 });
 $('#purpose').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;S.purpose=b.dataset.p;render();});
 // 위치
+// 자주 가는 위치 (최대 2개) — 폰에만 저장
+const MYK='hanki_myplaces';const MYKINDS=['집','직장','학교','학원','기타'];
+function myPlaces(){try{return JSON.parse(localStorage.getItem(MYK)||'[]');}catch{return[];}}
+function saveMyPlaces(a){try{localStorage.setItem(MYK,JSON.stringify(a));}catch{}}
 function renderLoc(){
-  const opts=[...DATA.anchors.map(a=>({name:a.name,coord:a.coord,k:'회사'})),{name:'현재 위치',coord:null,k:'GPS'}];
-  $('#locOpts').innerHTML=opts.map((o,i)=>`<button class="opt" data-i="${i}" aria-pressed="${o.name===S.loc.name}"><span class="pin" style="width:8px;height:8px;border-radius:50%;background:var(--accent)"></span>${o.name}<span class="k">${o.k}</span></button>`).join('');
-  $('#locOpts').onclick=e=>{const b=e.target.closest('button');if(!b)return;const o=opts[+b.dataset.i];
-    if(o.coord){S.loc=o;$('#locPop').classList.remove('open');render();return;}
+  const mine=myPlaces();
+  const opts=[{name:'현재 위치',coord:null,k:'GPS'},...mine.map(m=>({name:m.name,coord:m.coord,k:m.kind,mine:true})),...DATA.anchors.map(a=>({name:a.name,coord:a.coord,k:a.kind||'회사'}))];
+  $('#locOpts').innerHTML=opts.map((o,i)=>`<button class="opt" data-i="${i}" aria-pressed="${o.name===S.loc.name}"><span class="pin" style="width:8px;height:8px;border-radius:50%;background:var(--accent)"></span>${o.name}<span class="k">${o.k}</span>${o.mine?'<span class="k del" data-del="'+o.name+'" title="삭제">✕</span>':''}</button>`).join('')
+    +(mine.length<2?`<div class="myadd"><div class="hint">자주 가는 곳을 현재 위치로 저장해 두면 한 번에 고를 수 있어요 (최대 2곳)</div><div class="row">${MYKINDS.map(k=>'<button class="chip" data-kind="'+k+'">'+k+'</button>').join('')}</div></div>`:'');
+  $('#locOpts').onclick=e=>{const del=e.target.closest('[data-del]');if(del){e.stopPropagation();const a=myPlaces().filter(m=>m.name!==del.dataset.del);saveMyPlaces(a);if(S.loc.name===del.dataset.del)S.loc=DATA.anchors[0];renderLoc();render();return;}
+    const kb=e.target.closest('[data-kind]');if(kb){const kind=kb.dataset.kind;if(!navigator.geolocation){alert('이 기기는 위치를 못 잡아요');return;}kb.textContent='저장 중…';
+      navigator.geolocation.getCurrentPosition(pos=>{const a=myPlaces().filter(m=>m.kind!==kind||kind==='기타');const name=kind==='기타'?prompt('이름을 붙여주세요 (예: 부모님 집)','기타')||'기타':kind;a.push({name,kind,coord:{lat:pos.coords.latitude,lng:pos.coords.longitude}});saveMyPlaces(a.slice(-2));renderLoc();},()=>{alert('위치 권한이 없어요. 설정에서 허용해 주세요.');renderLoc();},{timeout:8000});return;}
+    const b=e.target.closest('button.opt');if(!b)return;const o=opts[+b.dataset.i];
+    if(o.coord){S.loc={name:o.name,coord:o.coord,kind:o.k};$('#locPop').classList.remove('open');render();return;}
     if(!navigator.geolocation){alert('이 기기는 위치를 못 잡아요');return;}
     b.textContent='위치 잡는 중…';
     navigator.geolocation.getCurrentPosition(pos=>{S.loc={name:'현재 위치',coord:{lat:pos.coords.latitude,lng:pos.coords.longitude}};$('#locPop').classList.remove('open');render();},()=>{alert('위치 권한이 없어요. 설정에서 허용해 주세요.');renderLoc();},{timeout:8000});
@@ -773,7 +796,7 @@ $('#pick').addEventListener('click',e=>{
   else if(b.dataset.pi!=null){const it=P.items[+b.dataset.pi];if(it.kind==='shop'){detail(it.id);return;}P.lad={n:P.items.length,rows:0,rungs:[],start:null,win:+b.dataset.pi,path:null};}
   renderPick();
 });
-document.addEventListener('click',e=>{const fb=e.target.closest('[data-feedback]');if(fb){const C=DATA.config||{};const shop=fb.dataset.shop||'';if(!C.feedbackEmail){alert('오류 신고·개선 건의·후기 남기기는 로그인 후 이용할 수 있습니다. 가입·로그인 기능은 준비 중입니다.');return;}const sub=encodeURIComponent('[AIBK 한끼] '+(shop?'정보 오류: '+shop:'오류 신고 / 개선 건의'));const body=encodeURIComponent((shop?'가게: '+shop+'\n':'')+'내용:\n\n\n— 앱 v'+((DATA.release||{}).version||'')+' · '+navigator.userAgent.slice(0,60));location.href='mailto:'+C.feedbackEmail+'?subject='+sub+'&body='+body;return;}
+document.addEventListener('click',e=>{const fb=e.target.closest('[data-feedback]');if(fb){const C=DATA.config||{};const shop=fb.dataset.shop||'';if(!C.feedbackEmail){alert('오류 신고·개선 건의·후기 남기기는 로그인 후 이용할 수 있습니다. 가입·로그인 기능은 준비 중입니다.');return;}const sub=encodeURIComponent('['+(C.brand||'한끼')+'] '+(shop?'정보 오류: '+shop:'오류 신고 / 개선 건의'));const body=encodeURIComponent((shop?'가게: '+shop+'\n':'')+'내용:\n\n\n— 앱 v'+((DATA.release||{}).version||'')+' · '+navigator.userAgent.slice(0,60));location.href='mailto:'+C.feedbackEmail+'?subject='+sub+'&body='+body;return;}
   if(e.target.closest('#heroPick')){P.stage='setup';P.lad=null;renderPick();$('#pick').classList.add('open');$('#pick').scrollTop=0;}});
 
 (function(){
@@ -788,18 +811,18 @@ document.addEventListener('click',e=>{const fb=e.target.closest('[data-feedback]
   else{
     let inner='<ul><li>앱처럼 바로 열리고, 즐겨찾기가 안전하게 유지됩니다.</li><li>주소창 없이 전체 화면으로 보입니다.</li></ul>';
     if(isKakao)inner+=sub('카카오톡에서 열었다면',['오른쪽 아래 <b>⋯</b> → <b>다른 브라우저로 열기</b>(iPhone은 <b>Safari로 열기</b>)','그 다음 아래 안내대로 추가']);
-    inner+=sub('iPhone · Safari',['아래 가운데 <b>공유</b> 버튼(네모에 화살표)','<b>홈 화면에 추가</b> → 이름 <b>AIBK한끼</b> 확인 → 추가']);
+    inner+=sub('iPhone · Safari',['아래 가운데 <b>공유</b> 버튼(네모에 화살표)','<b>홈 화면에 추가</b> → 이름 <b>'+String(C.brand||'').replace(/\s/g,'')+'</b> 확인 → 추가']);
     inner+=sub('Android · Chrome',['오른쪽 위 <b>⋮</b> → <b>홈 화면에 추가</b>(또는 <b>앱 설치</b>)']);
     inner+=sub('Android · 삼성 인터넷',['아래 <b>≡</b> → <b>현재 페이지 추가</b> → <b>홈 화면</b>']);
     guide.push(sec('홈 화면에 추가해서 쓰세요',inner,true));
   }
   guide.push(sec('동료에게 추천하기',`<div class="sharebox">${C.qrDataUri?`<img src="${C.qrDataUri}" alt="앱 QR">`:''}<div><p>QR을 보여주거나 링크를 보내세요.</p><button class="primary" id="shareBtn">링크 공유하기</button><div class="hint" id="shareHint"></div></div></div>`,false));
-  guide.push(sec('이 앱은','<ul><li>IBK 본점·파이낸스타워에서 걸어서 갈 수 있는 종각·종로·을지로·명동 가게를 보여줍니다.</li><li>점심·회식·카페 목적을 고르고, 카테고리→메뉴→가게 순으로 둘러보거나, 맨 위 <b>「오늘 뭐 먹지?」</b> 카드에서 아무거나 뽑고 사다리를 타세요.</li><li>★ 인기 별점은 최근 1년 블로그 언급을 같은 분류끼리 비교한 사내 임시 지표입니다.</li><li>정보가 틀리거나 빠졌으면 알려주세요 — 직원 제보 기능을 준비 중입니다.</li></ul>',false));
+  guide.push(sec('이 앱은','<ul>'+(C.about||[]).map(x=>'<li>'+x+'</li>').join('')+'</ul>',false));
   const act=activeNotices();if(act.length)guide.push(sec(`공지 <small>${act.length}건</small>`,`<div class="nlist">${act.map(n=>`<div class="n"><div class="t">${n.title}</div><div class="m">${n.date||''}</div><div class="b">${n.body||''}</div></div>`).join('')}</div>`,false));
-  guide.push(sec('만든 사람 · 알려드립니다',`<ul><li>이 앱은 IBK기업은행의 <b>공식 서비스가 아닙니다.</b> ${C.authorNote||''}${C.author?` (${C.author})`:''}</li><li>데이터는 공공 인허가·포털 자료를 자동 수집한 것이라 <b>정확성을 보장하지 않습니다.</b> 메뉴·가격·영업 여부는 방문 전 가게에 확인해 주세요.</li><li>서버는 회사 시스템이 아닌 개인 계정(깃허브)에서 운영됩니다. 개인정보를 수집하지 않습니다.</li></ul>`,false));
+  guide.push(sec('만든 사람 · 알려드립니다','<ul>'+(C.disclaimer||[]).map(x=>'<li>'+x+'</li>').join('')+'</ul>',false));
   $('#helpBtn').onclick=()=>{activeNotices().forEach(n=>markSeen(n.id));refreshDot();$('#helpBody').innerHTML=guide.join('');$('#helpPop').classList.add('open');
-    const sb=$('#shareBtn');if(sb)sb.onclick=async()=>{const url=C.appUrl||location.href;const text='AIBK 한끼 — 을지로·종각·명동 점심·카페·회식, 걸어서 가는 한끼';try{if(navigator.share){await navigator.share({title:'AIBK 한끼',text,url});}else{await navigator.clipboard.writeText(url);$('#shareHint').textContent='링크를 복사했어요. 메신저에 붙여넣으세요.';}}catch(e){try{await navigator.clipboard.writeText(url);$('#shareHint').textContent='링크를 복사했어요.';}catch{ $('#shareHint').textContent=url; }}};};
-  const R=DATA.release||{};$('#verV').textContent=R.version||'0';$('#verD').textContent=(R.updated||'').replace('T',' ').slice(0,16);
+    const sb=$('#shareBtn');if(sb)sb.onclick=async()=>{const url=C.appUrl||location.href;const text=C.shareText||C.brand||'';try{if(navigator.share){await navigator.share({title:C.brand||'',text,url});}else{await navigator.clipboard.writeText(url);$('#shareHint').textContent='링크를 복사했어요. 메신저에 붙여넣으세요.';}}catch(e){try{await navigator.clipboard.writeText(url);$('#shareHint').textContent='링크를 복사했어요.';}catch{ $('#shareHint').textContent=url; }}};};
+  const R=DATA.release||{};$('#verV').textContent=R.version||'0';$('#verD').textContent='';
   $('#verBtn').onclick=()=>{$('#verNotes').innerHTML=(R.notes||[]).map(n=>`<div class="note"><h5>v${n.version} · ${n.title||''}<small>${n.date||''}</small></h5><ul>${(n.items||[]).map(i=>`<li>${i}</li>`).join('')}</ul></div>`).join('')||'<div class="na">아직 없어요</div>';$('#verPop').classList.add('open');};})();
 document.addEventListener('gesturestart',e=>e.preventDefault());
 let _lt=0;document.addEventListener('touchend',e=>{const t=Date.now();if(t-_lt<300){e.preventDefault();}_lt=t;},{passive:false});
@@ -817,6 +840,8 @@ function applyRemoteConfig(){const c=NOTICES.config||{};const C=DATA.config||(DA
   const first=unseenNotices()[0];if(first){const sp=$('#splash');const wait=sp?2200:300;setTimeout(()=>showNotice(first),wait);}}catch{}})();
 if(window.__spReady)window.__spReady();
 render();
+function askGps(){const b=$('#gpsBar');if(!navigator.geolocation){return;}navigator.geolocation.getCurrentPosition(pos=>{S.loc={name:'현재 위치',coord:{lat:pos.coords.latitude,lng:pos.coords.longitude}};if(b)b.hidden=true;render();},()=>{if(b)b.hidden=false;},{timeout:8000,maximumAge:300000});}
+if((DATA.config||{}).gpsFirst){askGps();const gb=$('#gpsBar');if(gb)gb.querySelector('button').onclick=askGps;}
 })();
 // 서비스 워커: 껍데기·데이터를 폰에 저장 → 다음부터 즉시 실행, 오프라인 가능. 새 버전이 준비되면 띠로 알린다.
 if('serviceWorker' in navigator&&/^https:/.test(location.protocol)){navigator.serviceWorker.register('sw.js').then(reg=>{
