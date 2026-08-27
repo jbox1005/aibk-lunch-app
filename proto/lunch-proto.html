@@ -149,6 +149,77 @@ h2.q em{font-style:normal;color:var(--accent)}
 .result .sm{color:var(--ink2);font-size:13px;margin-top:4px}
 .hint{color:var(--ink3);font-size:12px}
 
+
+/* refined */
+:root{--line:#E9ECF1;--chip:#F0F2F5;--shadow:none}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--line:#232932;--chip:#1F242C;--shadow:none}}
+:root[data-theme="dark"]{--line:#232932;--chip:#1F242C;--shadow:none}
+html,body{font-size:14.5px;letter-spacing:-.005em}
+.top{border-bottom:1px solid var(--line);padding-bottom:0}
+.brand{margin-bottom:12px}
+.brand img{height:18px}
+.brand .nm{font-size:16px}
+.brand .sub{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase}
+.loc,.walk{border-radius:10px;padding:7px 11px;font-size:14px;background:transparent}
+.walk .v{font-size:16px}
+/* 목적 탭: 밑줄형 */
+.seg{background:transparent;padding:0;gap:0;margin-top:8px;border-radius:0}
+.seg button{border-radius:0;padding:10px 0 9px;color:var(--ink3);font-weight:500;border-bottom:2px solid transparent;margin-bottom:-1px}
+.seg button[aria-pressed="true"]{background:transparent;color:var(--ink);box-shadow:none;border-bottom-color:var(--accent)}
+.pbody .seg{border-bottom:1px solid var(--line)}
+/* 히어로: 절제 */
+.hero{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:none;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,var(--accent-soft),transparent 60%);opacity:.9}
+.hero>*{position:relative}
+.hero .t{font-size:19px}
+.hero .s{color:var(--ink2);opacity:1}
+.hero .dice{font-size:0;width:34px;height:34px;border-radius:50%;border:1px solid var(--accent);display:grid;place-items:center}
+.hero .dice::after{content:"";width:14px;height:14px;border:1.5px solid var(--accent);border-radius:3px;box-shadow:inset 0 0 0 3px var(--card),inset 0 0 0 4.5px var(--accent)}
+h2.q{font-size:19px;color:var(--ink);margin:6px 0 14px}
+h2.q em{color:var(--accent)}
+/* 카테고리: 선으로 나눈 목록 */
+.grid{gap:0;border-top:1px solid var(--line)}
+.cat{border:0;border-bottom:1px solid var(--line);border-radius:0;padding:14px 4px;background:transparent}
+.cat:active{transform:none;background:var(--chip)}
+.cat .n{font-size:18px}
+.cat .c{font-size:12.5px;color:var(--ink3)}
+.cat .c b{font-weight:500}
+.cat .m{font-size:13.5px;color:var(--ink2)}
+.cat .m b{font-weight:500}
+/* 칩 */
+.chip{padding:8px 13px;font-size:13.5px;background:transparent}
+.chip b{font-weight:500}
+.chip.sig::before{color:var(--accent);content:"·";font-size:18px;line-height:0}
+/* 가게 목록: 카드 대신 행 */
+.list{gap:0;border-top:1px solid var(--line)}
+.shop{border:0;border-bottom:1px solid var(--line);border-radius:0;padding:14px 4px;background:transparent}
+.shop .nm{font-size:15.5px;font-weight:500}
+.shop .wm{font-size:20px}
+.shop .meta{margin-top:6px}
+.tag{background:transparent;border:1px solid var(--line);color:var(--ink2);padding:2px 8px;font-size:11.5px;border-radius:999px}
+.tag.ok{border-color:transparent;background:var(--ok-soft)} .tag.warn{border-color:transparent;background:var(--warn-soft)} .tag.bad{border-color:transparent;background:var(--bad-soft)}
+.tag.acc{border-color:transparent;background:var(--accent-soft)}
+/* 추천 화면 */
+.fld label{font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.steps button{background:transparent;border:1px solid var(--line);font-size:16px;padding:11px 0}
+.steps button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent)}
+.primary{font-size:16px;padding:14px;border-radius:12px}
+.secondary{background:transparent;border:1px solid var(--line);font-weight:500}
+.picks{gap:0;border-top:1px solid var(--line)}
+.pk{border:0;border-bottom:1px solid var(--line);border-radius:0;padding:13px 4px;background:transparent}
+.pk.win{background:var(--accent-soft)}
+.pk .i{font-size:18px;color:var(--ink3)}
+.pk .n{font-weight:500;font-size:15.5px}
+.ladder{border-radius:12px}
+.result{background:transparent;border:0;border-top:2px solid var(--accent);border-bottom:1px solid var(--line);border-radius:0;padding:18px 4px}
+.result .big{font-size:26px}
+.foot{padding-top:24px;letter-spacing:.04em}
+/* 상세 */
+.dbody h1{font-size:24px}
+.dist2 div,.sec{border-radius:12px}
+.sec h4{font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.dtop{border-bottom:1px solid var(--line)}
+
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
@@ -208,7 +279,7 @@ function render(){
   let html=`<div class="crumb">${crumb.join('')}</div>`;
 
   if(!S.l1){
-    html+=`<button class="hero" id="heroPick"><span><span class="t">오늘 ${PN[S.purpose]} 뭐 먹지?</span><span class="s">아무거나 골라줘 · 사다리타기</span></span><span class="dice">🎲</span></button>`;
+    html+=`<button class="hero" id="heroPick"><span><span class="t">오늘 ${PN[S.purpose]} 뭐 먹지?</span><span class="s">아무거나 골라줘 · 사다리타기</span></span><span class="dice"></span></button>`;
     html+=`<h2 class="q display">${PN[S.purpose]}, ${S.loc.name}에서 걸어서 <em>${S.walkMax}분</em> 안 ${ps.length}곳</h2>`;
     html+='<div class="grid">'+DATA.tree.map(l1=>{const n=ps.filter(p=>(p.l1||[]).includes(l1.code)).length;const inL1=ps.filter(p=>(p.l1||[]).includes(l1.code));const tm=topMenus(inL1,null,5);return `<button class="cat" data-l1="${l1.code}" ${n?'':'disabled'}><span class="n display">${l1.name}</span><span class="c"><b class="num">${n}</b>곳</span><span class="m">${tm.length?tm.map((x,i)=>i===0?`<b>${x}</b>`:x).join(' · '):'<i>메뉴 정보 없음</i>'}</span></button>`;}).join('')+'</div>';
     if(!ps.length)html+=`<div class="empty">이 거리 안에는 아직 없어요.<br><button data-walk="15">도보 15분으로 넓히기</button></div>`;
@@ -311,7 +382,7 @@ function renderPick(){
     h+=`<div class="fld"><label>리뷰 몇 개 이상 <span class="hint">(프로토: 가상 리뷰수)</span></label><div class="steps">${[0,50,100,200].map(n=>`<button data-rev="${n}" aria-pressed="${n===P.minRev}">${n?n+'+':'전부'}</button>`).join('')}</div></div>`;
     h+=`<div class="hint">도보거리는 위의 ${S.walkMax}분 설정을 따릅니다. 지금 조건에 맞는 가게 ${ps.length}곳.</div>`;
     if(P.stage==='empty')h+=`<div class="empty">조건에 맞는 게 없어요. 카테고리나 리뷰 조건을 풀어보세요.</div>`;
-    h+=`<button class="primary" id="doDraw" ${ps.length?'':'disabled'}>🎲 ${P.n}개 뽑기</button>`;
+    h+=`<button class="primary" id="doDraw" ${ps.length?'':'disabled'}>${P.n}개 뽑기</button>`;
   } else {
     h+=`<div class="hint">${PN[S.purpose]} · ${P.mode==='menu'?'메뉴':'가게'} ${P.items.length}개 · ${P.cats.size===DATA.tree.length?'전체 카테고리':[...P.cats].map(c=>L1NAME[c]).join('·')} · 리뷰 ${P.minRev}+</div>`;
     h+=`<div class="picks">${P.items.map((it,i)=>`<button class="pk ${P.lad&&P.lad.win===i?'win':''}" data-pi="${i}"><span class="i num">${i+1}</span><span><span class="n">${it.name}</span><br><span class="d">${it.sub}</span></span><span class="r">리뷰 ${it.rev}</span></button>`).join('')}</div>`;
